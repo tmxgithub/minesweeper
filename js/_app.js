@@ -1,19 +1,17 @@
 'use strict';
-(function(global) {
-    // var document = global.document;
+(function() {
+// 初期設定
+    var LENGTH_X  = 9;
+    var LENGTH_Y = 9;
+    var mines = 10;
+    var blockCount = null;
+    var blocks = [];
+    var blockElement = [];
 
-// ボード
-    var CreateBoard = function() {
-        // var self = this;
-    }
-    // ボードマス作成
-    CreateBoard.prototype.initialize = function() {
-        var LENGTH_X  = 9;
-        var LENGTH_Y = 9;
-        var mines = 10;
-        var blockCount = null;
-        var blocks = [];
-        var blockElement = [];
+    window.addEventListener('DOMContentLoaded', initBoard, false);
+
+// ボードセッティング
+    function initBoard() {
         blockCount = LENGTH_X * LENGTH_Y;
         var board = document.getElementById('board');
         for (var i = 0; i < LENGTH_X; i++) {
@@ -22,51 +20,39 @@
             for(var j = 0; j < LENGTH_Y; j++) {
                 blocks[i][j] = 0;
                 var block = document.createElement('b');
-                block.className = "closed";
+                block.className = "";
                 (function (n, m) {
                     block.onclick = function() {
                         var isClear = selectBlock(n, m, true, n, m);
-                        // console.log(1);
+                        console.log(isClear);
                         if (isClear) {
                           alert('CLEAR');
                         }
                     }
                 })(i, j);
                 board.appendChild(block);
+
+// 爆弾配置
+                var randomNum = Math.floor(Math.random() * 10) + 1;
+                // RandomY = Math.floor(Math.random() * 20) + 1;
+                var bombElm = document.createElement('i');
+                bombElm.className = "bomb";
+                console.log(randomNum);
+                if(randomNum > 9.5){
+                    blocks[i][j] = 1;
+                    // blockCount++;
+                    block.appendChild(bombElm);
+                }
+                blockElement[i][j] = block;
             }
-            var randomNum = Math.floor(Math.random() * 10) + 1;
-            // RandomY = Math.floor(Math.random() * 20) + 1;
-            var bombElm = document.createElement('i');
-            bombElm.className = "bomb";
-            console.log(randomNum);
-            if(randomNum > 9.5){
-                blocks[i][j] = 1;
-                // blockCount++;
-                block.appendChild(bombElm);
-            }
-            blockElement[i][j] = block;
         }
-    };
-
-    // マス作成
-    // createBoard.prototype.initBoard = function() {
-    // };
-
-    // 爆弾作成
-    // createBoard.prototype.initBomb = function() {
-    // };
-    document.addEventListener('DOMContentLoaded', function() {
-        var tCreateBoard = new CreateBoard();
-        tCreateBoard.initialize();
-        // tCreateBoard.initBoard();
-        // tCreateBoard.initBomb();
-    }, false);
+    }
 
 // ブロック選択
     function selectBlock(i, j, isClick, orgI, orgJ) {
         if (isClick && blocks[i][j] == 1) {
             gameover();
-            // if (confirm("GAME ORVER\nRESTART?")) {
+            // if () {
             //     // initBoard();
             // }
             return false;
@@ -164,6 +150,7 @@
             timer();
         }, 1000);
     }
+
 })();
 
 
